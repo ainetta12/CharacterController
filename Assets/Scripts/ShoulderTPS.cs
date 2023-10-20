@@ -7,9 +7,11 @@ public class ShoulderTPS : MonoBehaviour
 {
     private CharacterController _controller;
     Transform _camera;
-    
-
     Transform _lookAtTransform;
+
+    public GameObject normalCamera;
+    public GameObject aimCamera;
+
     private float _horizontal;
     private float _vertical;
 
@@ -54,6 +56,18 @@ public class ShoulderTPS : MonoBehaviour
 
         Movement();
         Jump();
+
+        if(Input.GetButton("Fire2"))
+        {
+            normalCamera.SetActive(false);
+            aimCamera.SetActive(true);
+        }
+
+        else
+        {
+            normalCamera.SetActive(true);
+            aimCamera.SetActive(false);
+        }
     }
 
     void Jump()
