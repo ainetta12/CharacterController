@@ -8,9 +8,7 @@ public class TPSController : MonoBehaviour
     private Transform _camera;
     private float _horizontal;
     private float _vertical;
-
-    
-
+    Animator _animator;
 
     //variable para saltar y gravedad
 
@@ -34,9 +32,11 @@ public class TPSController : MonoBehaviour
     private bool _isGrounded;
 
     // Start is called before the first frame update
-    void Start()
+    
+    void Awake()
     {
         _controller = GetComponent <CharacterController>();
+        _animator = GetComponentInChildren<Animator>();
         _camera = Camera.main.transform;
     }
 
@@ -62,6 +62,8 @@ public class TPSController : MonoBehaviour
     {
         Vector3 direction = new Vector3(_horizontal, 0, _vertical);
 
+        _animator.SetFloat("Velx", 0);    
+        _animator.SetFloat("VelZ", direction.magnitude);
 
 
       if(direction !=  Vector3.zero)
@@ -103,10 +105,13 @@ public class TPSController : MonoBehaviour
     {
         Vector3 direction = new Vector3(_horizontal, 0, _vertical);
 
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + _camera.eulerAngles.y;
-            float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y,_camera.eulerAngles.y, ref turnSmoothVeloity, turnSmoothTime);
+        _animator.SetFloat("Velx", _horizontal);    
+        _animator.SetFloat("VelZ", _vertical);
 
-            transform.rotation = Quaternion.Euler(0, smoothAngle, 0);
+        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + _camera.eulerAngles.y;
+        float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y,_camera.eulerAngles.y, ref turnSmoothVeloity, turnSmoothTime);
+
+        transform.rotation = Quaternion.Euler(0, smoothAngle, 0);
 
 
       if(direction !=  Vector3.zero)
