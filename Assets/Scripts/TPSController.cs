@@ -8,6 +8,9 @@ public class TPSController : MonoBehaviour
     private Transform _camera;
     private float _horizontal;
     private float _vertical;
+
+    public int shootDamage = 2;
+  
     Animator _animator;
 
     //variable para saltar y gravedad
@@ -56,13 +59,20 @@ public class TPSController : MonoBehaviour
         }
         
         Jump();
+
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            RayTest();   
+        }
+         
+    
     }
 
     void Movement()
     {
         Vector3 direction = new Vector3(_horizontal, 0, _vertical);
 
-        _animator.SetFloat("Velx", 0);    
+        //_animator.SetFloat("Velx", 0);    
         _animator.SetFloat("VelZ", direction.magnitude);
 
 
@@ -75,19 +85,52 @@ public class TPSController : MonoBehaviour
 
             Vector3 moveDirection = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
 
-            _controller.Move(direction * playerSpeed * Time.deltaTime);
+            _controller.Move(moveDirection * playerSpeed * Time.deltaTime); 
         }
  
+    }
+    void RayTest()
+    {
+        //Raycast simple
+        /*if(Physics.Raycast(transform.position, transform.forward, 10))
+        {
+            Debug.Log("Hit");
+            Debug.DrawRay(transform.position, transform.forward * 10, Color.green);
+        }
+        else 
+        {
+                Debug.DrawRay(transform.position, transform.forward * 10, Color.red);
+        }*/ 
+
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, transform.forward, out hit, 10))
+        {
+            Debug.Log(hit.transform.name);
+            Debug.Log(hit.transform.position);
+            //Destroy(hit.transform.gameObject);
+
+            Box caja = hit.transform.GetComponent<Box>();
+
+            if(caja != null)
+            {
+                caja.TakeDamage(shootDamage);
+            }
+        }
+
     }
 
     void Jump()
     {
 
         _isGrounded = Physics.CheckSphere(_sensorPosition.position, _sensorRadius, _groundLayer);
+
+        //Ground snsor raycast
+        /*_isGrounded = Physics.Raycast(_sensorPosition.position, Vector3.down, _sensorRadius, _groundLayer);
+        Debug.DrawRay(_sensorPosition.position, Vector3.down * _sensorRadius, Color.red);*/
        
         if(_isGrounded && _playerGravity.y < 0)
         {
-            _playerGravity.y = 0;
+            _playerGravity.y = -2;
         }
 
         if(_isGrounded && Input.GetButtonDown("Jump"))
