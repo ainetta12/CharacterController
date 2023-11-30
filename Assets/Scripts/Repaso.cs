@@ -32,7 +32,7 @@ public class Repaso : MonoBehaviour
        private Vector3 _playergravity;
        private float turnSmoothVeloity;
        private float turnSmoothTime = 0.1f;
-       [SerializeField]private float sensorPosition;
+       [SerializeField]private transform sensorPosition;
        [SerializeField] private float sensorRadius = 0.2f;
        [SerializeField] private float groundLayer;
        private bool _isGrounded;
