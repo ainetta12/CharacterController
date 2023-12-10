@@ -26,15 +26,17 @@ public class Repaso : MonoBehaviour
        private Transform _camera;
        private float _horizontal;
        private float _vertical;
+
        [SerializeField] private float _playerSpeed = 5;
        [SerializeField] private float _jumpForce = 6;
+       [SerializeField]private transform sensorPosition;
+       [SerializeField] private float sensorRadius = 0.2f;
+       [SerializeField] private float groundLayer;
+
        private float gravity = -9.81f;
        private Vector3 _playergravity;
        private float turnSmoothVeloity;
        private float turnSmoothTime = 0.1f;
-       [SerializeField]private transform sensorPosition;
-       [SerializeField] private float sensorRadius = 0.2f;
-       [SerializeField] private float groundLayer;
        private bool _isGrounded;
 
      void Awake()
@@ -99,7 +101,7 @@ public class Repaso : MonoBehaviour
 
        }
 
-       Animaciones
+  Animaciones
 
        Animator _animator
 
@@ -107,7 +109,7 @@ public class Repaso : MonoBehaviour
        {
 
            _animator = GetComponentInChildren<Animator>();
-           Este In Children es porque el idle está dentro del personaje
+           //Este In Children es porque el idle está dentro del personaje
        }
 
        Idle - añadir animator
@@ -207,6 +209,105 @@ public class Repaso : MonoBehaviour
                 box.TakeDamage(2);
             }
         }
+
+RayCast
+    public class RayoMagico : MonoBehaviour
+{
+    public Camera camaraPrincipal;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(Input.GetButtonDown("Fire1"))
+        {
+            Rayo();
+        }
+    }
+
+    void Rayo()
+    {
+        Ray ray = camaraPrincipal.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitRayo;
+
+        if(Physics.Raycast(ray, out hitRayo, Mathf.Infinity))
+        {
+            Debug.DrawLine(Camera.main.transform.position, hitRayo.point);
+            
+            if(hitRayo.transform.gameObject.layer == 6)
+            {
+                Debug.Log("impacto bola");
+                StartCoroutine(TimerCoroutine1());
+                
+                
+            }
+
+            if(hitRayo.transform.gameObject.layer == 7)
+            {
+                Debug.Log("impacto cubo grande");
+                StartCoroutine(TimerCoroutine2());
+            }
+
+            if(hitRayo.transform.gameObject.layer == 8)
+            {
+                Debug.Log("impacto cubo pequeÃ±o");
+                StartCoroutine(TimerCoroutine3());
+            }
+        } 
+    }
+
+    IEnumerator TimerCoroutine1()
+    {
+        Debug.Log("5");
+        yield return new WaitForSeconds (1);
+        Debug.Log("4");
+        yield return new WaitForSeconds (1);
+        Debug.Log("3");
+        yield return new WaitForSeconds (1);
+        Debug.Log("2");
+        yield return new WaitForSeconds (1);
+        Debug.Log("1");
+        yield return new WaitForSeconds (1);
+        SceneManager.LoadScene(1);
+    }
+
+    IEnumerator TimerCoroutine2()
+    {
+        Debug.Log("5");
+        yield return new WaitForSeconds (1);
+        Debug.Log("4");
+        yield return new WaitForSeconds (1);
+        Debug.Log("3");
+        yield return new WaitForSeconds (1);
+        Debug.Log("2");
+        yield return new WaitForSeconds (1);
+        Debug.Log("1");
+        yield return new WaitForSeconds (1);
+        SceneManager.LoadScene(2);
+    }
+
+    IEnumerator TimerCoroutine3()
+    {
+        Debug.Log("5");
+        yield return new WaitForSeconds (1);
+        Debug.Log("4");
+        yield return new WaitForSeconds (1);
+        Debug.Log("3");
+        yield return new WaitForSeconds (1);
+        Debug.Log("2");
+        yield return new WaitForSeconds (1);
+        Debug.Log("1");
+        yield return new WaitForSeconds (1);
+        SceneManager.LoadScene(3);
+    }
+}
+
+
     }*/
 
 
